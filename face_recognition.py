@@ -31,15 +31,9 @@ facerec = dlib.face_recognition_model_v1(face_rec_model_path)
 #候选人脸描述子list
 descriptors = []
 
-# 对文件夹下的每一个人脸进行:
-# 1.人脸检测
-# 2.关键点检测
-# 3.描述子提取
 for f in glob.glob(os.path.join(faces_folder_path, "*.jpg")):
     print("Processing file: {}".format(f))
     img = io.imread(f)
-    #win.clear_overlay()
-    #win.set_image(img)
 
     # 1.人脸检测
     dets = detector(img, 1)
@@ -48,10 +42,6 @@ for f in glob.glob(os.path.join(faces_folder_path, "*.jpg")):
     for k, d in enumerate(dets):
         # 2.关键点检测
         shape = sp(img, d)
-        # 画出人脸区域和和关键点
-        # win.clear_overlay()
-        # win.add_overlay(d)
-        # win.add_overlay(shape)
 
         # 3.描述子提取，128D向量
         face_descriptor = facerec.compute_face_descriptor(img, shape)
@@ -60,8 +50,7 @@ for f in glob.glob(os.path.join(faces_folder_path, "*.jpg")):
         v = numpy.array(face_descriptor)
         descriptors.append(v)
 
-# 对需识别人脸进行同样处理
-# 提取描述子，不再注释
+# 对candidate人脸进行同样处理
 
 img = io.imread(img_path)
 dets = detector(img, 1)
